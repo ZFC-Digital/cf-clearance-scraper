@@ -1,21 +1,13 @@
 # Use the official Node.js image as the base image
-FROM node:latest
+FROM node:current-slim
 
 # Install necessary dependencies for running Chrome
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    ca-certificates \
-    apt-transport-https \
-    xvfb \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qq \
+  && apt-get install -qq --no-install-recommends \
+    ca-certificates chromium xvfb \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && ln -s /usr/bin/chromium /usr/bin/google-chrome
 
 # Set up the working directory in the container
 WORKDIR /app
