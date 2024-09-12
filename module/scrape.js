@@ -20,7 +20,7 @@ const scrape = async ({ proxy = {},
     url = 'https://nopecha.com/demo/cloudflare',
     defaultCookies = false,
     mode = 'waf', // or captcha
-    blockMedia = false
+    // blockMedia = false
 }) => {
     return new Promise(async (resolve, reject) => {
         global.browserLength++
@@ -53,19 +53,12 @@ const scrape = async ({ proxy = {},
             await page.setRequestInterception(true);
 
             page.on('request', (request) => {
-
-                if (request.resourceType() === 'stylesheet' || request.resourceType() === 'font' || request.resourceType() === 'image' || request.resourceType() === 'media') {
-                    if (blockMedia) request.abort();
-                    else request.continue();
-                } else {
-                    request.continue();
-                    if (request.url() === url) {
-                        const reqHeaders = request.headers();
-                        delete reqHeaders['cookie'];
-                        headers = { ...headers, ...reqHeaders, host: new URL(url).hostname };
-                    }
+                request.continue();
+                if (request.url() === url) {
+                    const reqHeaders = request.headers();
+                    delete reqHeaders['cookie'];
+                    headers = { ...headers, ...reqHeaders, host: new URL(url).hostname };
                 }
-
             });
 
 
@@ -113,7 +106,6 @@ const scrape = async ({ proxy = {},
                     return resolve({ code: 500, message: 'Request Timeout' })
                 }
             }
-
 
             headers['cookie'] = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ')
 

@@ -29,7 +29,7 @@ app.post('/cf-clearance-scraper', async (req, res) => {
         url: req.body['url'],
         defaultCookies: req.body['defaultCookies'],
         mode: (req.body['mode'] && req.body['mode'] == 'captcha') ? 'captcha' : 'waf',
-        blockMedia: req.body['blockMedia']
+        // blockMedia: req.body['blockMedia']
     }).catch(err => { return { code: 500, message: err.message } })
 
     res.send(response)

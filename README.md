@@ -1,5 +1,11 @@
 # CF Clearance Scraper
 
+[Disclosure]
+- Cloudflare no longer offers the Turnstile token with input on some sites. For this reason, some sites may have problems in getting Turnstile token.
+- If you still see waf when you send a request with the received header information, there is probably tls fingerprint protection on the site. You can send your requests with such libraries. https://www.npmjs.com/package/cycletls
+- If you are having problems, please delete the local image completely and install the latest image
+
+
 [UPDATE] You can now get a Turnstile Captcha token. It will return it in 5 seconds on average.
 
 This package provides an api that returns cookies (cf-clearance) that you can request on a website protected by Cloudflare WAF (corporate or normal) without being blocked by WAF.
@@ -48,7 +54,6 @@ It is not recommended to change the user agent information. You will be returned
             mode:"waf", // gets waf or captcha values
             // agent: null,
             // defaultCookies: [],
-            // blockMedia: true // or false
             // Proxy information (not mandatory)
             // proxy: {
             //     host: '1.1.1.1',
@@ -86,7 +91,6 @@ It is not recommended to change the user agent information. You will be returned
 
 **PORT** The default is 3000. It is not recommended to change it.
 
-**blockMedia** If the default true is used, it saves resources by preventing the loading of resources such as fonts, images, css. However, it prevents the library from working correctly on some sites. If the captcha cannot be passed and a timeout error is received, you must send false.
 
 Sample WAF Response
 
