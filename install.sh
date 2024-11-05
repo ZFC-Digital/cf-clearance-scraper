@@ -1,6 +1,6 @@
 curl -L https://github.com/854771076/cf-clearance-scraper/archive/refs/heads/master.zip -o cf-clearance-scraper-master.zip
 unzip cf-clearance-scraper-master.zip
-cd cf-clearance-scraper-master
+cd cf-clearance-scraper-main
 
 # 构建镜像
 docker build -t captcha_cracker .
