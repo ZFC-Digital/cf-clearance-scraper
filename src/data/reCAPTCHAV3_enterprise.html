@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=<reCAPTCHA_site_key>" defer></script>
+    <script>
+        window.onload= function () {
+            console.log('begin')
+            grecaptcha.enterprise.ready(function () {
+                console.log('in')
+                grecaptcha.enterprise.execute('<reCAPTCHA_site_key>', { action: 'submit' }).then(function (token) {
+                    console.log("token:",token)
+                    let input = document.createElement('input');
+                    input.id = 'my_token';
+                    input.name = 'my_token';
+                    input.value = token;  // Ensure `token` is defined earlier in your code
+
+                    // Append the input to the body (or another container)
+                    document.body.appendChild(input);
+
+                    document.appendChild(input)
+                });
+            });
+        };
+    </script>
+</body>
+
+</html>
