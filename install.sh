@@ -1,5 +1,5 @@
-curl -L https://github.com/854771076/cf-clearance-scraper/archive/refs/heads/master.zip -o cf-clearance-scraper-master.zip
-unzip cf-clearance-scraper-master.zip
+curl -L https://github.com/854771076/cf-clearance-scraper/archive/refs/heads/master.zip -o cf-clearance-scraper-main.zip
+unzip cf-clearance-scraper-main.zip
 cd cf-clearance-scraper-main
 
 # 构建镜像
