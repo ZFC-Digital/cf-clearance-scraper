@@ -9,7 +9,7 @@ const schema = {
     "properties": {
         "mode": {
             "type": "string",
-            "enum": ["source", "turnstile-min", "turnstile-max", "waf-session"],
+            "enum": ["source", "turnstile-min", "turnstile-max", "waf-session","recaptcha-v3","recaptcha-v3-enterprise"],
         },
         "proxy": {
             "type": "object",
@@ -29,6 +29,9 @@ const schema = {
             "type": "string"
         },
         "siteKey": {
+            "type": "string"
+        },
+        "action":{
             "type": "string"
         }
     },
