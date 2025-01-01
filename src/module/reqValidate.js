@@ -25,6 +25,9 @@ const schema = {
             "type": "string",
             "format": "uri",
         },
+        "userAgent": {
+            "type": "string"
+        },
         "authToken": {
             "type": "string"
         },
@@ -39,6 +42,7 @@ const schema = {
 // const data = {
 //     mode: "source",
 //     url: "https://example.com",
+//     userAgent: "Mozilla/5.0 ...",
 //     proxy: {
 //         host: "localhost",
 //         port: 8080,

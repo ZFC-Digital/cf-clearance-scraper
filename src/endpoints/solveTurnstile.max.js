@@ -1,4 +1,4 @@
-function solveTurnstileMin({ url, proxy }) {
+function solveTurnstileMin({ url, proxy, userAgent }) {
     return new Promise(async (resolve, reject) => {
 
         if (!url) return reject('Missing url parameter')
@@ -25,6 +25,9 @@ function solveTurnstileMin({ url, proxy }) {
             const interceptManager = new RequestInterceptionManager(client)
 
             await page.setRequestInterception(true);
+            if (userAgent) {
+                await page.setUserAgent(userAgent);
+            }
             page.on('request', async (request) => {
                 try {
                     if (proxy) {

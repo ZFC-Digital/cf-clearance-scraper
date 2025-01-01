@@ -9,7 +9,7 @@ async function findAcceptLanguage(page) {
     })
 }
 
-function getSource({ url, proxy }) {
+function getSource({ url, proxy, userAgent }) {
     return new Promise(async (resolve, reject) => {
 
         if (!url) return reject('Missing url parameter')
@@ -30,6 +30,9 @@ function getSource({ url, proxy }) {
         try {
             const page = await context.newPage();
             await page.setRequestInterception(true);
+            if (userAgent) {
+                await page.setUserAgent(userAgent);
+            }
             page.on('request', async (request) => {
                 try {
                     if (proxy) {
