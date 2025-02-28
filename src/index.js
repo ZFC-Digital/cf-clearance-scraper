@@ -81,5 +81,6 @@ app.use((req, res) => { res.status(404).json({ code: 404, message: 'Not Found' }
 
 if (process.env.NODE_ENV == 'development') module.exports = app
 process.on('uncaughtException', function (err) {
+    console.log(err);
     console.log('No worries,still working on~~~');
 });

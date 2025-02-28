@@ -33,6 +33,12 @@ const schema = {
         },
         "action":{
             "type": "string"
+        },
+        "callback":{
+            "type": "string"
+        },
+        "axios":{
+            "type": "boolean"
         }
     },
     "required": ["mode", "url"],
