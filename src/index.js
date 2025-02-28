@@ -27,7 +27,7 @@ const solveTurnstileMax = require('./endpoints/solveTurnstile.max')
 const solveRecaptchaV3 = require('./endpoints/solveRecaptcha.v3')
 const solveRecaptchaV3Enterprise = require('./endpoints/solveRecaptcha.v3.enterprise')
 const wafSession = require('./endpoints/wafSession')
-
+const getVercel= require('./endpoints/getvercel')
 
 app.post('/cf-clearance-scraper', async (req, res) => {
     try{
@@ -48,6 +48,9 @@ app.post('/cf-clearance-scraper', async (req, res) => {
         global.browserLength++
     
         switch (data.mode) {
+            case "vercel":
+                result = await getVercel(data).then(res => { return { source: res, code: 200 } }).catch(err => { return { code: 500, message: err.message } })
+                break;
             case "source":
                 result = await getSource(data).then(res => { return { source: res, code: 200 } }).catch(err => { return { code: 500, message: err.message } })
                 break;

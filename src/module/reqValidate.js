@@ -9,7 +9,7 @@ const schema = {
     "properties": {
         "mode": {
             "type": "string",
-            "enum": ["source", "turnstile-min", "turnstile-max", "waf-session","recaptcha-v3","recaptcha-v3-enterprise"],
+            "enum": ["source", "turnstile-min", "turnstile-max", "waf-session","recaptcha-v3","recaptcha-v3-enterprise","vercel"],
         },
         "proxy": {
             "type": "object",
