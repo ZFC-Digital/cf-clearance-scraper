@@ -1,5 +1,9 @@
 # CF Clearance Scraper
 
+### 请我喝杯咖啡
+ETH 0x72691a36ed1fac3b197fb42612dc15a8958bf9f2
+
+
 This library was created for testing and training purposes to retrieve the page source of websites, create Cloudflare Turnstile tokens and create Cloudflare WAF sessions.
 
 Cloudflare protection not only checks cookies in the request. It also checks variables in the header. For this reason, it is recommended to use it with the sample code in this readme file.
