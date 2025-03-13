@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+    <input type="hidden" id="cf-response" name="cf-response">
+    <input type="hidden" id="cf-status" name="cf-status" value="0">
 </head>
 
 <body>
@@ -14,15 +16,18 @@
         window.onloadTurnstileCallback = function () {
             turnstile.render('.turnstile', {
                 sitekey: '<site-key>',
+                
                 callback: function (token) {
-                    var c = document.createElement('input');
-                    c.type = 'hidden';
-                    c.name = 'cf-response';
+                    var c=document.querySelector('#cf-response');
+                    var status=document.querySelector('#cf-status');
                     c.value = token;
-                    document.body.appendChild(c);
+                    status.value="1"
+
+                    
                 },
             });
         };
+        
 
     </script>
 </body>
