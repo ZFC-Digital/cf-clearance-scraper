@@ -12,7 +12,7 @@ def timer_decorator(func):
         return result
     return wrapper
 @timer_decorator
-def get_cf_token(site='https://testnet.monad.xyz/',siteKey='0x4AAAAAAA-3X4Nd7hf3mNGx',method="turnstile-min",url='http://127.0.0.1:3000/cf-clearance-scraper',authToken=None,action=None):
+def get_cf_token(site='https://testnet.monad.xyz/',siteKey='0x4AAAAAAA-3X4Nd7hf3mNGx',method="turnstile-min",url='http://127.0.0.1:3000/cf-clearance-scraper',authToken=None,action=None,maxSize=10):
     data = {
             "url": site,
             "siteKey": siteKey,
@@ -22,7 +22,10 @@ def get_cf_token(site='https://testnet.monad.xyz/',siteKey='0x4AAAAAAA-3X4Nd7hf3
         data.update({
             "authToken": authToken,
         })
-
+    if maxSize:
+        data.update({
+            "maxSize": maxSize
+        })
     if action:
         data.update({
             "action": action
@@ -49,7 +52,10 @@ def create_cf_page_pool(site='https://testnet.monad.xyz/',siteKey='0x4AAAAAAA-3X
         data.update({
             "authToken": authToken,
         })
-
+    if maxSize:
+        data.update({
+            "maxSize": maxSize
+        })
     if action:
         data.update({
             "action": action
@@ -76,7 +82,7 @@ def remove_cf_page_pool(site='https://testnet.monad.xyz/',siteKey='0x4AAAAAAA-3X
         data.update({
             "authToken": authToken,
         })
-
+    
     if action:
         data.update({
             "action": action
@@ -93,8 +99,8 @@ def remove_cf_page_pool(site='https://testnet.monad.xyz/',siteKey='0x4AAAAAAA-3X
         return result
     except requests.RequestException as e:
         logger.exception(f"请求过程中发生错误: {e}")
-pool=create_cf_page_pool(maxSize=10)
-print(pool)
+# pool=create_cf_page_pool(maxSize=5)
+# print(pool)
 # start_time = time.time()
 # for i in range(100):
     
@@ -106,15 +112,15 @@ print(pool)
 # 多线程
 from concurrent.futures import ThreadPoolExecutor,as_completed
 def get_cf_token_wrapper(index):
-    token=get_cf_token()
+    token=get_cf_token(maxSize=5)
     logger.info(f"get_cf_token_wrapper {index} {token}")
     return 
 start_time = time.time()
-with ThreadPoolExecutor(max_workers=10) as executor:
-    results = [executor.submit(get_cf_token_wrapper,i) for i in range(100)]
+with ThreadPoolExecutor(max_workers=5) as executor:
+    results = [executor.submit(get_cf_token_wrapper,i) for i in range(10)]
     for future in as_completed(results):
         future.result()
 end_time = time.time()
 execution_time = end_time - start_time
 print(f"函数执行时间: {execution_time:.2f} 秒")
-print(remove_cf_page_pool())
+# print(remove_cf_page_pool())

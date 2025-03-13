@@ -79,39 +79,86 @@ class PagePool {
 class PagePoolManager {
     constructor() {
         this.poolMap = new Map();
+        this.lock = false;
+        setInterval(()=>this.checkIdlePool(),20000)
     }
-    // getPagePool(),返回一个url对应的pagePool
-    getPagePool(url) {
-        if (this.poolMap.has(url)) {
-            return this.poolMap.get(url);
-        } else {
-            return null;
+    async getPagePool(url) {
+        // 等待锁释放
+        while (this.lock) {
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        // 加锁
+        this.lock = true;
+
+        try {
+            if (this.poolMap.has(url)) {
+                this.poolMap.get(url).expireTime=Date.now() + 60*1000
+                return this.poolMap.get(url).pool;
+            } else {
+                return null;
+            }
+        } finally {
+            // 释放锁
+            this.lock = false;
         }
     }
     // addPagePool(),添加一个url对应的pagePool
     async addPagePool(params) {
-        if (this.poolMap.has(params.url)) {
-            return null
-        } else {
-            const pagePool = new PagePool(params);
-            await pagePool.initPool();
-            this.poolMap.set(params.url, pagePool);
-            return true
+        while (this.lock) {
+            await new Promise(resolve => setTimeout(resolve, 10));
         }
+        this.lock = true;
+
+        try {
+            if (this.poolMap.has(params.url)) {
+                return this.getPagePool(params.url);
+            } else {
+                const pagePool = new PagePool(params);
+                await pagePool.initPool();
+                this.poolMap.set(params.url, {
+                    pool: pagePool,
+                    expireTime: Date.now() + 60*1000,
+                });
+                return pagePool
+            }
+        } finally {
+            this.lock = false;
+        }
+        
             
     }
     // removePagePool(),删除一个url对应的pagePool
     async removePagePool(params) {
-        if (this.poolMap.has(params.url)) {
-            const pagePool = this.poolMap.get(params.url);
-            for (let i = 0; i < pagePool.pool.length; i++) {
-                const page = pagePool.pool[i];
-                await page.page.close();
+        while (this.lock) {
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        this.lock = true;
+        try {
+            if (this.poolMap.has(params.url)) {
+                const pagePool = this.poolMap.get(params.url).pool;
+                for (let i = 0; i < pagePool.pool.length; i++) {
+                    const page = pagePool.pool[i];
+                    await page.page.close();
+                }
+                this.poolMap.delete(params.url);
+                return true
+            } else {
+                return null
             }
-            this.poolMap.delete(params.url);
-            return true
-        } else {
-            return null
+        } finally {
+            this.lock = false;
+        }
+        
+    }
+    // 检查闲置pool机制
+    async checkIdlePool() {
+        for (let [url, pool_obj] of this.poolMap) {
+            if (Date.now() > pool_obj.expireTime) {
+                // 过期，删除
+                await this.removePagePool({ url: url });
+                console.log('removePagePool:'+url);
+                continue;
+            }
         }
     }
 }
@@ -125,13 +172,13 @@ async function createPagePoolManager() {
 
         global.page_pool_manager = new PagePoolManager();
 
-        global.page_pool_manager = page_pool_manager;
-
+        setInterval(()=>global.page_pool_manager.checkIdlePool(),1000) 
     } catch (e) {
         console.log(e.message);
         if (global.finished == true) return
         await new Promise(resolve => setTimeout(resolve, 3000));
         await createPagePoolManager();
+        
     }
 }
 createPagePoolManager()

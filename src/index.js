@@ -56,6 +56,17 @@ app.post('/cf-clearance-scraper', async (req, res) => {
                 result = await getSource(data).then(res => { return { source: res, code: 200 } }).catch(err => { return { code: 500, message: err.message } })
                 break;
             case "turnstile-min":
+                var pagepool=await global.page_pool_manager.getPagePool(data.url)
+                if(pagepool==null){
+                    pagepool=await global.page_pool_manager.addPagePool(data)
+                }else{
+                    // 对比data.maxSize和pagepool.maxSize,如果data.maxSize大于pagepool.maxSize,则更新pagepool.maxSize
+                    if(data.maxSize!=pagepool.maxSize&&pagepool){
+                        await global.page_pool_manager.removePagePool(data)
+                        await global.page_pool_manager.addPagePool(data)
+                    }
+                }
+                
                 result = await solveTurnstileMin(data).then(res => { return { token: res, code: 200 } }).catch(err => { return { code: 500, message: err.message } })
                 break;
             case "turnstile-max":
@@ -74,7 +85,7 @@ app.post('/cf-clearance-scraper', async (req, res) => {
         
         res.status(result.code ?? 500).send(result)
     }catch(err){
-        res.status(result.code ?? 504).send(result)
+        res.status(result.code ?? 504).send(err.msg)
     }
     
 })
