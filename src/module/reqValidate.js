@@ -39,6 +39,9 @@ const schema = {
         },
         "axios":{
             "type": "boolean"
+        },
+        "maxSize":{
+            "type": "integer"
         }
     },
     "required": ["mode", "url"],
