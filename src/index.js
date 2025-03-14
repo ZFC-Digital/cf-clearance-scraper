@@ -45,7 +45,7 @@ app.post('/cf-clearance-scraper', async (req, res) => {
         if (process.env.SKIP_LAUNCH != 'true' && !global.browser) return res.status(500).json({ code: 500, message: 'The scanner is not ready yet. Please try again a little later.' })
     
         var result = { code: 500 }
-    
+        if(!data.maxSize) data.maxSize=10
         
     
         switch (data.mode) {
