@@ -45,20 +45,20 @@ function getSource({ url, proxy }) {
             });
             page.on('response', async (res) => {
                 try {
-                    if ([200, 302].includes(res.status()) && [url, url + '/'].includes(res.url())) {
-                        await page.waitForNavigation({ waitUntil: 'load', timeout: 5000 }).catch(() => { });
-                        const cookies = await page.cookies()
-                        let headers = await res.request().headers()
-                        delete headers['content-type']
-                        delete headers['accept-encoding']
-                        delete headers['accept']
-                        delete headers['content-length']
-                        headers["accept-language"] = await findAcceptLanguage(page)
-                        await context.close()
-                        isResolved = true
-                        clearInterval(cl)
-                        resolve({ cookies, headers })
-                    }
+                    
+                    await page.waitForNavigation({ waitUntil: 'load', timeout: 5000 }).catch(() => { });
+                    const cookies = await page.cookies()
+                    let headers = await res.request().headers()
+                    delete headers['content-type']
+                    delete headers['accept-encoding']
+                    delete headers['accept']
+                    delete headers['content-length']
+                    headers["accept-language"] = await findAcceptLanguage(page)
+                    await context.close()
+                    isResolved = true
+                    clearInterval(cl)
+                    resolve({ cookies, headers })
+                    
                 } catch (e) { }
             })
 
