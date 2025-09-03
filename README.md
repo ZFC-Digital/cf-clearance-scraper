@@ -11,8 +11,6 @@ Cookies with cf in the name belong to Cloudflare. You can find out what these co
 
 ## Sponsor
 
-[![Capsolver](src/data/capsolver.webp)](https://www.capsolver.com/?utm_source=github&utm_medium=repo&utm_campaign=scraping&utm_term=cf-clearance-scraper)
-
 [![ScrapeDo](src/data/sdo.gif)](https://scrape.do/?utm_source=github&utm_medium=repo_ccs)
 
 ## Installation
